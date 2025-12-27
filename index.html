@@ -1,1 +1,1608 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetBilet - Yeni Nesil Seyahat</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Modern Tech Palette */
+            --primary: #2563eb; /* Royal Blue */
+            --primary-dark: #1e40af;
+            --secondary: #64748b; /* Slate */
+            --accent: #f59e0b; /* Amber */
+            --success: #10b981; /* Emerald */
+            --bg-body: #f8fafc; /* Slate 50 */
+            --surface: #ffffff;
+            --text-main: #0f172a; /* Slate 900 */
+            --text-light: #64748b; /* Slate 500 */
+            --border: #e2e8f0;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            
+            --radius-sm: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.5;
+        }
+
+        /* Layout Container */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-body);
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            font-family: inherit;
+        }
+
+        .user-btn:hover {
+            background: var(--surface);
+            border-color: var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            padding: 2rem 0;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero / Welcome Screen */
+        .hero-section {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-icon {
+            font-size: 5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.025em;
+            line-height: 1.1;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Forms */
+        .form-card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            max-width: 480px;
+            margin: 0 auto;
+            border: 1px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 3rem; /* Space for icon */
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s;
+            background: var(--bg-body);
+            color: var(--text-main);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background: var(--surface);
+        }
+
+        /* Toggle Switch */
+        .toggle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            padding: 0.75rem;
+            background: var(--bg-body);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .toggle-wrapper:hover { border-color: var(--primary); background: var(--surface); }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--secondary);
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover { background-color: var(--primary-dark); }
+
+        .btn-secondary {
+            background-color: var(--surface);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { background-color: var(--bg-body); border-color: var(--text-light); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 2px solid var(--border);
+            font-weight: 600;
+        }
+        .btn-outline:hover { 
+            border-color: var(--primary); 
+            color: var(--primary); 
+            background: var(--surface);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-light);
+            width: auto;
+            padding: 0.5rem;
+        }
+        .btn-ghost:hover { color: var(--text-main); background: var(--bg-body); }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        .btn-success:hover { filter: brightness(90%); }
+
+        .btn-freeze {
+            background-color: #0ea5e9; /* Sky blue */
+            color: white;
+            border: none;
+        }
+        .btn-freeze:hover { background-color: #0284c7; }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* Search Screen Layout */
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Results Screen Layout */
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .flight-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .flight-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            }
+            
+            .hero-actions {
+                flex-direction: row;
+                justify-content: center;
+                max-width: 100%;
+                gap: 1rem;
+            }
+
+            .hero-actions .btn {
+                width: auto;
+                min-width: 160px;
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+            
+            .search-bar-desktop {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr auto;
+                gap: 1rem;
+                background: var(--surface);
+                padding: 1.5rem;
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-lg);
+                align-items: end;
+            }
+            
+            .search-bar-desktop .form-group { margin-bottom: 0; }
+            
+            /* Fix Alignment */
+            .search-bar-desktop input, 
+            .search-bar-desktop select, 
+            .search-bar-desktop .btn {
+                height: 52px;
+            }
+        }
+
+        /* Flight Card */
+        .flight-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flight-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .flight-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .flight-route {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .route-point {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .route-line {
+            flex: 1;
+            height: 2px;
+            background: var(--border);
+            margin: 0 1rem;
+            position: relative;
+        }
+
+        .route-line::after {
+            content: '✈'; /* Using text symbol here as it's part of CSS content, but could be icon */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(90deg);
+            background: var(--surface);
+            padding: 0 0.5rem;
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        .flight-footer {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .price-display {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-amount {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .price-label {
+            font-size: 0.75rem;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Calendar & Filters */
+        .calendar-strip {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .calendar-item {
+            flex: 1;
+            min-width: 100px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .calendar-item.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .calendar-item.active .sub-text { color: rgba(255,255,255,0.8); }
+
+        .sub-text { font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem; display: block; }
+
+        .filter-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            font-size: 0.9rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .filter-btn.active {
+            background: var(--text-main);
+            color: white;
+            border-color: var(--text-main);
+        }
+
+        /* Checkout */
+        .checkout-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .checkout-layout {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        .summary-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px dashed var(--border);
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--text-main);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            animation: scaleIn 0.2s ease;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-main);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+            display: none;
+            z-index: 2000;
+            box-shadow: var(--shadow-lg);
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Support Fab */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 900;
+            border: none;
+        }
+        .fab:hover { transform: scale(1.1); }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo" onclick="goToScreen('screen-search'); return false;">
+                <i class="ri-plane-fill"></i> NetBilet
+            </a>
+            <button class="user-btn" onclick="goToScreen('screen-login')">
+                <i class="ri-user-line"></i> <span id="header-username">Giriş Yap</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- SCREEN: WELCOME -->
+        <div id="screen-welcome" class="screen active">
+            <div class="hero-section">
+                <div class="hero-icon"><i class="ri-flight-takeoff-line"></i></div>
+                <h1 class="hero-title">Seyahatinizi Planlayın</h1>
+                <p class="hero-subtitle">Dünyanın her yerine en uygun uçuşları bulun. Hızlı, güvenli ve kolay.</p>
+                
+                <div class="hero-actions">
+                    <button class="btn btn-primary" onclick="goToScreen('screen-login')">
+                        <i class="ri-user-add-line"></i> Üye Girişi Yap
+                    </button>
+                    <button class="btn btn-secondary" onclick="goToScreen('screen-register')">
+                        <i class="ri-user-add-line"></i> Kayıt Ol
+                    </button>
+                    <button class="btn btn-outline" onclick="continueAsGuest()">
+                        <i class="ri-flashlight-line"></i> Üye Olmadan Devam Et
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN: LOGIN -->
+        <div id="screen-login" class="screen">
+            <div class="form-card">
+                <div style="display:flex; align-items:center; margin-bottom:1.5rem;">
+                    <button class="btn-ghost" onclick="goToScreen('screen-welcome')" style="margin-right:1rem;"><i class="ri-arrow-left-line"></i></button>
+                    <h2 style="margin:0;">Giriş Yap</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-email">E-posta Adresi</label>
+                    <div class="input-wrapper">
+                        <i class="ri-mail-line input-icon"></i>
+                        <input type="email" id="login-email" placeholder="ornek@email.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Şifre</label>
+                    <div class="input-wrapper">
+                        <i class="ri-lock-line input-icon"></i>
+                        <input type="password" id="login-password" placeholder="******">
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="completeLogin()">Giriş Yap</button>
+            </div>
+        </div>
+
+        <!-- SCREEN: REGISTER -->
+        <div id="screen-register" class="screen">
+            <div class="form-card">
+                <div style="display:flex; align-items:center; margin-bottom:1.5rem;">
+                    <button class="btn-ghost" onclick="goToScreen('screen-welcome')" style="margin-right:1rem;"><i class="ri-arrow-left-line"></i></button>
+                    <h2 style="margin:0;">Kayıt Ol</h2>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reg-name">Ad Soyad</label>
+                    <div class="input-wrapper">
+                        <i class="ri-user-line input-icon"></i>
+                        <input type="text" id="reg-name" placeholder="Adınız Soyadınız">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="reg-tc">TC Kimlik No</label>
+                    <div class="input-wrapper">
+                        <i class="ri-id-card-line input-icon"></i>
+                        <input type="text" id="reg-tc" placeholder="11 Haneli TC No" maxlength="11">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">E-posta</label>
+                    <div class="input-wrapper">
+                        <i class="ri-mail-line input-icon"></i>
+                        <input type="email" id="reg-email" placeholder="ornek@email.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="reg-pass">Şifre</label>
+                    <div class="input-wrapper">
+                        <i class="ri-lock-line input-icon"></i>
+                        <input type="password" id="reg-pass" placeholder="******">
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="completeRegistration()">Kayıt Ol</button>
+            </div>
+        </div>
+
+        <!-- SCREEN: SEARCH -->
+        <div id="screen-search" class="screen">
+            <div class="search-container">
+                <h2 style="margin-bottom: 2rem; text-align: center;">Nereyi Keşfetmek İstersiniz?</h2>
+                
+                <div class="search-bar-desktop"> <!-- Responsive Grid Layout -->
+                    <div class="form-group">
+                        <label for="origin">Nereden</label>
+                        <div class="input-wrapper">
+                            <i class="ri-flight-takeoff-line input-icon"></i>
+                            <input type="text" id="origin" value="İstanbul (IST)" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="destination">Nereye</label>
+                        <div class="input-wrapper">
+                            <i class="ri-flight-land-line input-icon"></i>
+                            <select id="destination">
+                                <option value="Paris">Paris (CDG)</option>
+                                <option value="Londra">Londra (LHR)</option>
+                                <option value="Berlin">Berlin (BER)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Tarih</label>
+                        <div class="input-wrapper">
+                            <i class="ri-calendar-line input-icon"></i>
+                            <input type="date" id="date" value="2025-01-15">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="goToScreen('screen-results')">
+                        <i class="ri-search-line"></i> Ara
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN: RESULTS -->
+        <div id="screen-results" class="screen">
+            <div class="results-header">
+                <div style="display:flex; align-items:center; gap:1rem;">
+                    <button class="btn-ghost" onclick="goToScreen('screen-search')"><i class="ri-arrow-left-line"></i></button>
+                    <div>
+                        <h2 style="margin:0; font-size:1.5rem;">İstanbul - Paris</h2>
+                        <span style="color:var(--text-light); font-size:0.9rem;">15 Ocak 2025 • 1 Yolcu</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar Strip -->
+            <div class="calendar-strip">
+                <button class="calendar-item" onclick="selectDate(this, '14 Ocak')">
+                    <strong>14 Oca</strong>
+                    <span class="sub-text">4.500 TL</span>
+                </button>
+                <button class="calendar-item active" onclick="selectDate(this, '15 Ocak')">
+                    <strong>15 Oca</strong>
+                    <span class="sub-text">3.800 TL</span>
+                </button>
+                <button class="calendar-item" onclick="selectDate(this, '16 Ocak')">
+                    <strong>16 Oca</strong>
+                    <span class="sub-text">4.100 TL</span>
+                </button>
+            </div>
+
+            <!-- Filters -->
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="applyFilter(this, 'Tümü')">Tümü</button>
+                <button class="filter-btn" onclick="applyFilter(this, 'En Ucuz')">En Ucuz</button>
+                <button class="filter-btn" onclick="applyFilter(this, 'En Hızlı')">En Hızlı</button>
+                <button class="filter-btn" onclick="applyFilter(this, 'Direkt Uçuş')">Direkt Uçuş</button>
+            </div>
+
+            <!-- Flight Grid -->
+            <div id="flight-list" class="flight-grid">
+                <!-- JS Injected -->
+            </div>
+        </div>
+
+        <!-- SCREEN: CHECKOUT -->
+        <div id="screen-checkout" class="screen">
+            <div style="display:flex; align-items:center; margin-bottom:1.5rem;">
+                <button class="btn-ghost" onclick="goToScreen('screen-results')" style="margin-right:1rem;"><i class="ri-arrow-left-line"></i></button>
+                <h2 style="margin:0;">Ödeme ve Onay</h2>
+            </div>
+
+            <div class="checkout-layout">
+                <!-- Left Column: Forms -->
+                <div>
+                    <!-- Saved Info Alert -->
+                    <div id="saved-info-alert" style="display:none; background:rgba(16, 185, 129, 0.1); color:var(--success); padding:1rem; border-radius:var(--radius-md); margin-bottom:1.5rem; align-items:center; gap:1rem;">
+                        <i class="ri-flashlight-fill" style="font-size:1.5rem;"></i>
+                        <div>
+                            <strong>Hızlı İşlem Modu</strong>
+                            <div style="font-size:0.9rem;">Bilgileriniz otomatik dolduruldu.</div>
+                        </div>
+                    </div>
+
+                    <!-- Passenger Info -->
+                    <div class="summary-card">
+                        <div class="summary-header">
+                            <h3 style="margin:0; font-size:1.1rem;">Yolcu Bilgileri</h3>
+                            <button class="btn-ghost" onclick="toggleEdit('passenger')" style="color:var(--primary);">Düzenle</button>
+                        </div>
+                        
+                        <div id="passenger-view">
+                            <div class="info-row"><span>Ad Soyad:</span> <strong id="view-name">Hakan Dağ</strong></div>
+                            <div class="info-row"><span>TCKN:</span> <strong id="view-tc">123*****789</strong></div>
+                            <div class="info-row"><span>E-posta:</span> <strong id="view-email">hakan@ornek.com</strong></div>
+                        </div>
+
+                        <div id="passenger-edit" style="display:none;">
+                            <div class="form-group">
+                                <label for="edit-name">Ad Soyad</label>
+                                <input type="text" id="edit-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-tc">TCKN</label>
+                                <input type="text" id="edit-tc">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-email">E-posta</label>
+                                <input type="email" id="edit-email">
+                            </div>
+                            <button class="btn btn-primary" onclick="savePassenger()">Kaydet</button>
+                        </div>
+                    </div>
+
+                    <!-- Payment Info -->
+                    <div class="summary-card">
+                        <div class="summary-header">
+                            <h3 style="margin:0; font-size:1.1rem;">Ödeme Yöntemi</h3>
+                            <button class="btn-ghost" onclick="toggleEdit('payment')" style="color:var(--primary);">Değiştir</button>
+                        </div>
+
+                        <!-- Default hidden, shown only if card exists -->
+                        <div id="payment-view" style="display:none;">
+                            <div class="info-row"><span>Kart:</span> <strong id="view-card"></strong></div>
+                        </div>
+
+                        <!-- Default visible for new users -->
+                        <div id="payment-edit">
+                            <div class="form-group">
+                                <label for="edit-card">Kart Numarası</label>
+                                <div class="input-wrapper">
+                                    <i class="ri-bank-card-line input-icon"></i>
+                                    <input type="text" id="edit-card" placeholder="0000 0000 0000 0000">
+                                </div>
+                            </div>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                                <div class="form-group">
+                                    <label for="edit-exp">SKT</label>
+                                    <input type="text" id="edit-exp" placeholder="AA/YY" maxlength="5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-cvc">CVC</label>
+                                    <input type="text" id="edit-cvc" placeholder="***" maxlength="3">
+                                </div>
+                            </div>
+                            
+                            <div id="save-card-option" style="margin-bottom:1rem; display:none;">
+                                <label class="toggle-wrapper">
+                                    <div class="toggle-switch">
+                                        <input type="checkbox" id="chk-save-card">
+                                        <span class="slider"></span>
+                                    </div>
+                                    <span style="font-weight:500; font-size:0.95rem;">Kartımı güvenli şekilde kaydet</span>
+                                </label>
+                            </div>
+
+                            <button class="btn btn-primary" onclick="savePayment()">Güncelle</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Summary -->
+                <div>
+                    <div class="summary-card" style="background:var(--bg-body); border:none;">
+                        <h3 style="margin-top:0;">Özet</h3>
+                        <div class="info-row"><span>Bilet Fiyatı</span> <span id="checkout-base-price">3.500 TL</span></div>
+                        <div class="info-row"><span>Vergiler</span> <span style="color:var(--success);">Dahil</span></div>
+                        <div class="total-row">
+                            <span>TOPLAM</span>
+                            <span id="checkout-total-price" style="color:var(--primary);">4.250 TL</span>
+                        </div>
+                        
+                        <div id="save-info-option" style="margin-top:1.5rem; display:none;">
+                            <label class="toggle-wrapper">
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="chk-save-info">
+                                    <span class="slider"></span>
+                                </div>
+                                <span style="font-weight:500; font-size:0.9rem;">Bilgilerimi sonraki uçuşlar için kaydet</span>
+                            </label>
+                        </div>
+
+                        <button class="btn btn-success" onclick="completePayment()" style="margin-top:1.5rem;">
+                            <i class="ri-secure-payment-line"></i> Ödemeyi Tamamla
+                        </button>
+                        
+                        <div style="text-align:center; margin-top:1rem; font-size:0.8rem; color:var(--text-light);">
+                            <i class="ri-shield-check-line"></i> 256-bit SSL ile korunmaktadır
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN: SUCCESS -->
+        <div id="screen-success" class="screen">
+            <div style="text-align:center; max-width:500px; margin:4rem auto;">
+                <div style="font-size:5rem; color:var(--success); margin-bottom:1rem;"><i class="ri-checkbox-circle-fill"></i></div>
+                <h2 style="font-size:2rem; margin-bottom:1rem;">İyi Yolculuklar!</h2>
+                <p style="color:var(--text-light); margin-bottom:2rem;">Biletiniz oluşturuldu ve e-posta adresinize gönderildi.</p>
+                <p id="success-message" style="font-weight:600; color:var(--text-main); margin-bottom:3rem;"></p>
+                
+                <!-- Membership Completion -->
+                <div id="complete-membership-box" style="display:none; background:var(--surface); padding:2rem; border-radius:var(--radius-lg); border:1px solid var(--border); text-align:left; margin-bottom:2rem;">
+                    <h3 style="margin-top:0; text-align:center;">Son Bir Adım Kaldı 🚀</h3>
+                    <p style="text-align:center; color:var(--text-light); margin-bottom:1.5rem;">Şifre belirleyerek üyeliğinizi tamamlayın.</p>
+                    
+                    <div class="form-group">
+                        <label for="new-password">Şifre Belirle</label>
+                        <input type="password" id="new-password" placeholder="******">
+                    </div>
+                    <button class="btn btn-primary" onclick="finalizeMembership()">Üyeliği Tamamla</button>
+                </div>
+
+                <button class="btn btn-secondary" onclick="goToScreen('screen-search')">Ana Sayfaya Dön</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL: Freeze Price -->
+    <div id="freeze-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 450px; text-align:left;">
+            <div style="text-align:center; margin-bottom:1.5rem;">
+                <div style="font-size:3rem; color:#0ea5e9; margin-bottom:0.5rem;"><i class="ri-snowy-line"></i></div>
+                <h3 style="margin:0;">Fiyatı Dondur</h3>
+                <p style="color:var(--text-light); font-size:0.9rem;">Bu fiyatı 24 saat boyunca sabitleyin.</p>
+            </div>
+
+            <div style="background:var(--bg-body); padding:1rem; border-radius:var(--radius-md); margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center;">
+                <span>Hizmet Bedeli</span>
+                <strong style="font-size:1.2rem; color:var(--primary);">50 TL</strong>
+            </div>
+
+            <!-- Payment Section -->
+            <div id="freeze-payment-form">
+                <div class="form-group">
+                    <label style="font-size:0.9rem;">Kart Numarası</label>
+                    <div class="input-wrapper">
+                        <i class="ri-bank-card-line input-icon"></i>
+                        <input type="text" id="freeze-card" placeholder="0000 0000 0000 0000">
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div class="form-group">
+                        <label style="font-size:0.9rem;">SKT</label>
+                        <input type="text" id="freeze-exp" placeholder="AA/YY" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:0.9rem;">CVC</label>
+                        <input type="text" id="freeze-cvc" placeholder="***" maxlength="3">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Saved Card View (Hidden by default) -->
+            <div id="freeze-saved-card" style="display:none; margin-bottom:1.5rem; padding:1rem; border:1px solid var(--border); border-radius:var(--radius-md);">
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                    <i class="ri-bank-card-fill" style="color:var(--primary);"></i>
+                    <span id="freeze-card-view"></span>
+                </div>
+                <button class="btn-ghost btn-sm" onclick="toggleFreezeCard()" style="margin-top:0.5rem; padding-left:0;">Farklı Kart Kullan</button>
+            </div>
+
+            <div style="display:flex; gap:1rem; margin-top:1.5rem;">
+                <button class="btn btn-secondary" onclick="closeFreezeModal()">Vazgeç</button>
+                <button class="btn btn-freeze" onclick="confirmFreeze()" style="flex:1;">50 TL Öde ve Sabitle</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast" style="display:none;">
+        <i class="ri-information-fill"></i> <span id="toast-msg">İşlem Başarılı</span>
+    </div>
+
+    <!-- Support FAB -->
+    <button class="fab" onclick="showToast('Canlı Destek Bağlanıyor...')">
+        <i class="ri-customer-service-2-line"></i>
+    </button>
+
+    <script>
+        let currentUser = null;
+        
+        // Database & Persistence
+        function loadDB() {
+            const stored = localStorage.getItem('netbilet_users');
+            if(stored) return JSON.parse(stored);
+            return [];
+        }
+
+        function saveDB() {
+            localStorage.setItem('netbilet_users', JSON.stringify(usersDB));
+        }
+
+        let usersDB = loadDB();
+
+        // Navigation
+        function goToScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        // Toast
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            t.style.display = 'flex';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        // Validation Helpers
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+        function validateTC(tc) {
+            return /^\d{11}$/.test(tc);
+        }
+        function validateCard(card) {
+            return /^\d{16}$/.test(card.replace(/\s/g, ''));
+        }
+        function validateDate(date) {
+            // Format: MM/YY
+            return /^(0[1-9]|1[0-2])\/\d{2}$/.test(date);
+        }
+        function validateCVC(cvc) {
+            return /^\d{3}$/.test(cvc);
+        }
+
+        // Auth Logic
+        function completeLogin() {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+
+            const foundUser = usersDB.find(u => u.email === email && u.pass === pass);
+
+            if(foundUser) {
+                currentUser = { ...foundUser }; // Copy user data
+                updateUserUI();
+                showToast("Giriş Başarılı");
+                goToScreen('screen-search');
+            } else {
+                showToast("Hata: Kullanıcı bulunamadı veya şifre yanlış!");
+            }
+        }
+
+        function continueAsGuest() {
+            currentUser = null;
+            updateUserUI();
+            goToScreen('screen-search');
+        }
+
+        function completeRegistration() {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const tc = document.getElementById('reg-tc').value;
+            const pass = document.getElementById('reg-pass').value;
+
+            if(!name || !email || !tc || !pass) {
+                showToast("Lütfen tüm alanları doldurunuz.");
+                return;
+            }
+
+            if(!validateEmail(email)) {
+                showToast("Geçersiz E-posta adresi!");
+                return;
+            }
+
+            if(!validateTC(tc)) {
+                showToast("TC Kimlik No 11 haneli olmalıdır!");
+                return;
+            }
+
+            // Add to DB
+            const newUser = {
+                name: name,
+                email: email,
+                tc: tc,
+                pass: pass,
+                card: null, 
+                cardView: ""
+            };
+            usersDB.push(newUser);
+            saveDB();
+
+            // Auto Login
+            currentUser = newUser;
+            updateUserUI();
+            showToast("Kayıt Başarılı");
+            goToScreen('screen-search');
+        }
+
+        function updateUserUI() {
+            const headerUser = document.getElementById('header-username');
+            if(currentUser) {
+                headerUser.innerText = currentUser.name;
+            } else {
+                headerUser.innerText = "Giriş Yap";
+            }
+            renderFlights(); // Re-render to update freeze buttons
+        }
+
+        // Flight Data & Rendering
+        const allFlights = [
+            { id: 1, airline: "THY", code: "TK1821", type: "Direkt", origin: "IST", dest: "CDG", time: "08:00", duration: "2s 30dk", price: "4.250 TL", priceRaw: 4250, date: "15 Ocak" },
+            { id: 2, airline: "Pegasus", code: "PC1134", type: "1 Aktarma", origin: "SAW", dest: "CDG", time: "06:15", duration: "5s 30dk", price: "3.800 TL", priceRaw: 3800, date: "15 Ocak" },
+            { id: 3, airline: "Air France", code: "AF123", type: "Direkt", origin: "IST", dest: "CDG", time: "14:00", duration: "2s 40dk", price: "5.100 TL", priceRaw: 5100, date: "15 Ocak" },
+            { id: 4, airline: "THY", code: "TK1999", type: "Direkt", origin: "IST", dest: "CDG", time: "09:00", duration: "2s 30dk", price: "4.500 TL", priceRaw: 4500, date: "14 Ocak" },
+            { id: 5, airline: "Pegasus", code: "PC2222", type: "1 Aktarma", origin: "SAW", dest: "CDG", time: "07:00", duration: "5s 30dk", price: "4.000 TL", priceRaw: 4000, date: "14 Ocak" },
+            { id: 6, airline: "THY", code: "TK2000", type: "Direkt", origin: "IST", dest: "CDG", time: "10:00", duration: "2s 30dk", price: "4.100 TL", priceRaw: 4100, date: "16 Ocak" }
+        ];
+
+        let currentFilter = "Tümü";
+        let currentDate = "15 Ocak";
+
+        function renderFlights() {
+            const container = document.getElementById('flight-list');
+            container.innerHTML = "";
+
+            let filtered = allFlights.filter(f => f.date === currentDate);
+
+            if (currentFilter === "En Ucuz") filtered.sort((a, b) => a.priceRaw - b.priceRaw);
+            if (currentFilter === "Direkt Uçuş") filtered = filtered.filter(f => f.type === "Direkt");
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem; color:var(--text-light);">
+                    <i class="ri-file-search-line" style="font-size:3rem;"></i>
+                    <p>Uçuş bulunamadı.</p>
+                </div>`;
+                return;
+            }
+
+            filtered.forEach(f => {
+                const freezeBtn = currentUser ? 
+                    `<button class="btn btn-freeze btn-sm" onclick="openFreezeModal('${f.price}')" style="width:auto; padding:0.5rem 0.75rem;">
+                        <i class="ri-lock-2-line"></i> Sabitle
+                    </button>` : '';
+                
+                const html = `
+                <div class="flight-card">
+                    <div class="flight-header">
+                        <span><i class="ri-plane-line"></i> ${f.airline} (${f.code})</span>
+                        <span style="background:var(--bg-body); padding:0.25rem 0.75rem; border-radius:1rem;">${f.type}</span>
+                    </div>
+                    <div class="flight-route">
+                        <div class="route-point">${f.time} <br><span style="font-size:0.8rem; font-weight:400; color:var(--text-light);">${f.origin}</span></div>
+                        <div class="route-line"></div>
+                        <div class="route-point">--:-- <br><span style="font-size:0.8rem; font-weight:400; color:var(--text-light);">${f.dest}</span></div>
+                    </div>
+                    <div class="flight-footer">
+                        <div class="price-display">
+                            <span class="price-amount">${f.price}</span>
+                            <span class="price-label">Her Şey Dahil</span>
+                        </div>
+                        <div style="display:flex; gap:0.5rem;">
+                            ${freezeBtn}
+                            <button class="btn btn-primary" onclick="selectFlight('${f.price}')">Seç <i class="ri-arrow-right-line"></i></button>
+                        </div>
+                    </div>
+                </div>`;
+                container.innerHTML += html;
+            });
+        }
+
+        function selectDate(el, date) {
+            document.querySelectorAll('.calendar-item').forEach(e => e.classList.remove('active'));
+            el.classList.add('active');
+            currentDate = date;
+            renderFlights();
+        }
+
+        function applyFilter(el, filter) {
+            document.querySelectorAll('.filter-btn').forEach(e => e.classList.remove('active'));
+            el.classList.add('active');
+            currentFilter = filter;
+            renderFlights();
+        }
+
+        // Checkout Logic
+        function selectFlight(price) {
+            document.getElementById('checkout-base-price').innerText = price;
+            document.getElementById('checkout-total-price').innerText = price; // Simplified logic
+            
+            const isMember = !!currentUser;
+            document.getElementById('saved-info-alert').style.display = isMember ? 'flex' : 'none';
+            document.getElementById('save-info-option').style.display = isMember ? 'none' : 'block';
+            document.getElementById('save-card-option').style.display = isMember ? 'block' : 'none';
+
+            // --- PASSENGER LOGIC ---
+            if(isMember) {
+                // Member: Show View Mode, Fill Data
+                document.getElementById('passenger-view').style.display = 'block';
+                document.getElementById('passenger-edit').style.display = 'none';
+                
+                document.getElementById('view-name').innerText = currentUser.name;
+                document.getElementById('view-email').innerText = currentUser.email;
+                document.getElementById('view-tc').innerText = currentUser.tc; 
+                
+                // Pre-fill edit inputs too in case they click edit
+                document.getElementById('edit-name').value = currentUser.name;
+                document.getElementById('edit-email').value = currentUser.email;
+                document.getElementById('edit-tc').value = currentUser.tc;
+            } else {
+                // Guest: Show Edit Mode, Clear Data
+                document.getElementById('passenger-view').style.display = 'none';
+                document.getElementById('passenger-edit').style.display = 'block';
+                
+                document.getElementById('edit-name').value = "";
+                document.getElementById('edit-tc').value = "";
+                document.getElementById('edit-email').value = "";
+            }
+
+            // --- PAYMENT LOGIC ---
+            // Check if user has saved card
+            const hasSavedCard = currentUser && currentUser.card;
+            
+            if (hasSavedCard) {
+                document.getElementById('payment-view').style.display = 'block';
+                document.getElementById('payment-edit').style.display = 'none';
+                document.getElementById('view-card').innerText = currentUser.cardView;
+            } else {
+                document.getElementById('payment-view').style.display = 'none';
+                document.getElementById('payment-edit').style.display = 'block';
+                // Clear inputs for security/logic
+                document.getElementById('edit-card').value = '';
+                document.getElementById('edit-exp').value = '';
+                document.getElementById('edit-cvc').value = '';
+            }
+
+            goToScreen('screen-checkout');
+        }
+
+        function toggleEdit(section) {
+            const view = document.getElementById(section + '-view');
+            const edit = document.getElementById(section + '-edit');
+            if(edit.style.display === 'none') {
+                edit.style.display = 'block';
+                view.style.display = 'none';
+            } else {
+                edit.style.display = 'none';
+                view.style.display = 'block';
+            }
+        }
+
+        function savePassenger() {
+            const name = document.getElementById('edit-name').value;
+            const tc = document.getElementById('edit-tc').value;
+            const email = document.getElementById('edit-email').value;
+
+            if(!name || !tc || !email) {
+                showToast("Lütfen tüm alanları doldurunuz.");
+                return;
+            }
+
+            if(!validateTC(tc)) {
+                showToast("TC Kimlik No 11 haneli olmalıdır!");
+                return;
+            }
+
+            if(!validateEmail(email)) {
+                showToast("Geçersiz E-posta adresi!");
+                return;
+            }
+
+            document.getElementById('view-name').innerText = name;
+            document.getElementById('view-tc').innerText = tc;
+            document.getElementById('view-email').innerText = email;
+
+            // Save to DB if Member
+            if(currentUser) {
+                const dbUser = usersDB.find(u => u.email === currentUser.email);
+                if(dbUser) {
+                    dbUser.name = name;
+                    dbUser.tc = tc;
+                    dbUser.email = email;
+                    saveDB();
+                }
+                // Update Session
+                currentUser.name = name;
+                currentUser.tc = tc;
+                currentUser.email = email;
+                showToast("Yolcu Bilgileri Güncellendi");
+            }
+
+            toggleEdit('passenger');
+        }
+
+        function savePayment() {
+            const cardInput = document.getElementById('edit-card').value;
+            const exp = document.getElementById('edit-exp').value;
+            const cvc = document.getElementById('edit-cvc').value;
+            const saveCard = document.getElementById('chk-save-card').checked;
+
+            if(!validateCard(cardInput)) {
+                showToast("Kart numarası 16 haneli olmalıdır!");
+                return;
+            }
+
+            if(!validateDate(exp)) {
+                showToast("SKT formatı AA/YY şeklinde olmalıdır! (Örn: 12/25)");
+                return;
+            }
+
+            if(!validateCVC(cvc)) {
+                showToast("CVC kodu 3 haneli olmalıdır!");
+                return;
+            }
+
+            if(cardInput && cardInput.length >= 16) {
+                const cardLast4 = cardInput.slice(-4);
+                const cardView = "Kart (**** " + cardLast4 + ")";
+                document.getElementById('view-card').innerText = cardView;
+
+                // Immediate Save if Checkbox is Checked and User is Member
+                if(currentUser && saveCard) {
+                    currentUser.card = cardLast4;
+                    currentUser.cardView = cardView;
+
+                    const dbUser = usersDB.find(u => u.email === currentUser.email);
+                    if(dbUser) {
+                        dbUser.card = cardLast4;
+                        dbUser.cardView = cardView;
+                        saveDB();
+                    }
+                    showToast("Kart Bilgileri Güncellendi");
+                }
+            }
+            toggleEdit('payment');
+        }
+
+        function completePayment() {
+            const isGuest = !currentUser;
+            const saveInfo = document.getElementById('chk-save-info')?.checked;
+            const saveCard = document.getElementById('chk-save-card')?.checked;
+            
+            // Validate Payment if entering new card
+            const paymentEditVisible = document.getElementById('payment-edit').style.display !== 'none';
+            if (paymentEditVisible) {
+                const cardInput = document.getElementById('edit-card').value;
+                const exp = document.getElementById('edit-exp').value;
+                const cvc = document.getElementById('edit-cvc').value;
+
+                if(!validateCard(cardInput)) {
+                    showToast("Kart numarası 16 haneli olmalıdır!");
+                    return;
+                }
+                if(!validateDate(exp)) {
+                    showToast("SKT formatı AA/YY şeklinde olmalıdır! (Örn: 12/25)");
+                    return;
+                }
+                if(!validateCVC(cvc)) {
+                    showToast("CVC kodu 3 haneli olmalıdır!");
+                    return;
+                }
+            }
+
+            if(isGuest && saveInfo) {
+                document.getElementById('complete-membership-box').style.display = 'block';
+            } else {
+                document.getElementById('complete-membership-box').style.display = 'none';
+            }
+
+            // Save Card Logic for Members
+            if (!isGuest && saveCard) {
+                const cardInput = document.getElementById('edit-card').value;
+                // Allow 16 digits
+                if (cardInput && cardInput.length >= 16) {
+                    const cardLast4 = cardInput.slice(-4);
+                    const cardView = "Kart (**** " + cardLast4 + ")";
+                    
+                    // Update Current User Session
+                    currentUser.card = cardLast4;
+                    currentUser.cardView = cardView;
+
+                    // Update Database
+                    const dbUser = usersDB.find(u => u.email === currentUser.email);
+                    if(dbUser) {
+                        dbUser.card = cardLast4;
+                        dbUser.cardView = cardView;
+                        saveDB();
+                        showToast("Kartınız Kaydedildi");
+                    }
+                }
+            }
+            
+            const name = document.getElementById('view-name').innerText;
+            document.getElementById('success-message').innerText = "Sayın " + name + ", biletiniz hazır.";
+            goToScreen('screen-success');
+        }
+
+        function finalizeMembership() {
+            const pass = document.getElementById('new-password').value;
+            
+            if(!pass) {
+                showToast("Lütfen bir şifre belirleyin.");
+                return;
+            }
+
+            // Get info from the summary view (populated by savePassenger)
+            const name = document.getElementById('view-name').innerText;
+            const email = document.getElementById('view-email').innerText;
+            const tc = document.getElementById('view-tc').innerText;
+
+            // Check if email is valid/not default
+            if(email === 'hakan@ornek.com' || !name || !tc) {
+                // Fallback: Try to get from edit inputs if view is default
+                const editName = document.getElementById('edit-name').value;
+                const editEmail = document.getElementById('edit-email').value;
+                const editTc = document.getElementById('edit-tc').value;
+                
+                if(editName && editEmail && editTc) {
+                    // Use these instead
+                    registerUser(editName, editEmail, editTc, pass);
+                    return;
+                }
+                
+                showToast("Yolcu bilgileri alınamadı.");
+                return;
+            }
+
+            registerUser(name, email, tc, pass);
+        }
+
+        function registerUser(name, email, tc, pass) {
+            // Check existence
+            if(usersDB.find(u => u.email === email)) {
+                showToast("Bu e-posta adresi zaten kayıtlı.");
+                return;
+            }
+
+            const newUser = {
+                name: name,
+                email: email,
+                tc: tc,
+                pass: pass,
+                card: null, 
+                cardView: ""
+            };
+
+            usersDB.push(newUser);
+            saveDB();
+
+            showToast("Üyelik Tamamlandı! Giriş yapabilirsiniz.");
+            document.getElementById('complete-membership-box').style.display = 'none';
+        }
+
+        // Freeze Modal
+        function openFreezeModal() { 
+            document.getElementById('freeze-modal').style.display = 'flex'; 
+            
+            // Check for saved card
+            if(currentUser && currentUser.card) {
+                document.getElementById('freeze-payment-form').style.display = 'none';
+                document.getElementById('freeze-saved-card').style.display = 'block';
+                document.getElementById('freeze-card-view').innerHTML = `
+                    <div style="font-weight:600; margin-bottom:0.25rem;">Kayıtlı Kart Kullanılıyor</div>
+                    <div style="color:var(--text-light); font-size:0.9rem;">${currentUser.cardView}</div>
+                `;
+            } else {
+                document.getElementById('freeze-payment-form').style.display = 'block';
+                document.getElementById('freeze-saved-card').style.display = 'none';
+                // Clear inputs
+                document.getElementById('freeze-card').value = '';
+                document.getElementById('freeze-exp').value = '';
+                document.getElementById('freeze-cvc').value = '';
+            }
+        }
+
+        function toggleFreezeCard() {
+            document.getElementById('freeze-payment-form').style.display = 'block';
+            document.getElementById('freeze-saved-card').style.display = 'none';
+        }
+
+        function closeFreezeModal() { document.getElementById('freeze-modal').style.display = 'none'; }
+        
+        function confirmFreeze() { 
+            // Validate if form is visible
+            if(document.getElementById('freeze-payment-form').style.display !== 'none') {
+                const card = document.getElementById('freeze-card').value;
+                const exp = document.getElementById('freeze-exp').value;
+                const cvc = document.getElementById('freeze-cvc').value;
+
+                if(!validateCard(card)) { showToast("Geçersiz Kart Numarası"); return; }
+                if(!validateDate(exp)) { showToast("Geçersiz SKT"); return; }
+                if(!validateCVC(cvc)) { showToast("Geçersiz CVC"); return; }
+            }
+
+            closeFreezeModal(); 
+            showToast("Fiyat 24 Saatliğine Sabitlendi! (50 TL Tahsil Edildi)"); 
+        }
+
+        // Init
+        window.onload = function() {
+            renderFlights();
+
+            // Auto-format Date Input (MM/YY)
+            const inputs = ['edit-exp', 'freeze-exp'];
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) {
+                    el.addEventListener('input', function(e) {
+                        let input = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                        if (input.length > 2) {
+                            input = input.substring(0, 2) + '/' + input.substring(2, 4);
+                        }
+                        e.target.value = input;
+                    });
+                }
+            });
+        };
+
+    </script>
+</body>
+</html>
 
