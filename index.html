@@ -47,6 +47,7 @@
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             line-height: 1.5;
+            overflow-x: hidden; /* Prevent horizontal scroll globally */
         }
 
         /* Layout Container */
@@ -54,7 +55,7 @@
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 1rem; /* Reduced padding for mobile */
         }
 
         /* Header */
@@ -64,13 +65,55 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            padding: 1rem 0;
+            padding: 0.75rem 0; /* Compact header */
         }
 
         .header-content {
             display: flex;
             align-items: center;
             justify-content: space-between;
+        }
+
+        /* Mobile Header Adjustments */
+        @media (max-width: 640px) {
+            /* Shrink logo and gap to fit everything */
+            .logo { font-size: 1rem; gap:0.2rem; }
+            
+            /* Reduce gap between right-side buttons */
+            .header-content > div { gap: 0.3rem !important; }
+
+            /* Login Button: Icon only, very compact */
+            .header-content .user-btn[onclick*="screen-login"] span:not([id]) {
+                display: none;
+            }
+            .header-content .user-btn[onclick*="screen-login"] {
+                padding: 0.4rem;
+                min-width: 32px;
+                justify-content: center;
+            }
+            
+            /* Frozen Button: Text visible but smaller font/padding */
+            .header-content .user-btn[onclick*="screen-frozen"] {
+                background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%) !important;
+                color: #0369a1 !important;
+                padding: 0.35rem 0.6rem;
+                border-radius: 2rem;
+                gap: 0.3rem;
+                font-size: 0.75rem; /* Smaller font */
+            }
+            
+            .header-content .user-btn[onclick*="screen-frozen"] span {
+                display: inline-block !important;
+                font-weight: 700;
+                white-space: nowrap; /* Prevent wrap */
+            }
+            
+            #frozen-count {
+                display: inline-flex !important;
+                margin-left: 0 !important;
+                font-size: 0.7rem !important;
+                padding: 0.1rem 0.35rem !important;
+            }
         }
 
         .logo {
@@ -277,7 +320,7 @@
         /* Buttons */
         .btn {
             width: 100%;
-            padding: 1rem;
+            padding: 0.75rem 1rem;
             border: none;
             border-radius: var(--radius-md);
             font-size: 1rem;
@@ -675,9 +718,14 @@
             <a href="#" class="logo" onclick="goToScreen('screen-search'); return false;">
                 <i class="ri-plane-fill"></i> NetBilet
             </a>
-            <button class="user-btn" onclick="goToScreen('screen-login')">
-                <i class="ri-user-line"></i> <span id="header-username">Giriş Yap</span>
-            </button>
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+                <button class="user-btn" onclick="goToScreen('screen-frozen')" style="background:linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); color:#0369a1;">
+                    <i class="ri-snowflake-line"></i> <span>Sabitlediklerim</span> <span id="frozen-count" style="background:#0ea5e9; color:white; padding:0.1rem 0.4rem; border-radius:1rem; font-size:0.75rem; margin-left:0.25rem;">0</span>
+                </button>
+                <button class="user-btn" onclick="goToScreen('screen-login')">
+                    <i class="ri-user-line"></i> <span id="header-username">Giriş Yap</span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -984,6 +1032,30 @@
             </div>
         </div>
 
+        <!-- SCREEN: FROZEN FLIGHTS -->
+        <div id="screen-frozen" class="screen">
+            <div style="display:flex; align-items:center; margin-bottom:1.5rem;">
+                <button class="btn-ghost" onclick="goToScreen('screen-search')" style="margin-right:1rem;"><i class="ri-arrow-left-line"></i></button>
+                <div>
+                    <h2 style="margin:0; font-size:1.5rem;"><i class="ri-snowflake-line" style="color:#0ea5e9;"></i> Sabitlenmiş Biletlerim</h2>
+                    <span style="color:var(--text-light); font-size:0.9rem;">Fiyatı sabitlediğiniz uçuşlar (24 saat geçerli)</span>
+                </div>
+            </div>
+            
+            <div id="frozen-flights-list" class="flight-grid">
+                <!-- Sabitlenmiş uçuşlar buraya gelecek -->
+            </div>
+            
+            <div id="no-frozen-flights" style="text-align:center; padding:4rem 2rem; color:var(--text-light);">
+                <i class="ri-snowflake-line" style="font-size:4rem; color:#cbd5e1;"></i>
+                <p style="margin-top:1rem; font-size:1.1rem;">Henüz sabitlenmiş biletiniz yok.</p>
+                <p style="font-size:0.9rem;">Uçuş ararken "Sabitle" butonuna tıklayarak<br>fiyatı 24 saat boyunca koruma altına alabilirsiniz.</p>
+                <button class="btn btn-primary" onclick="goToScreen('screen-search')" style="margin-top:1.5rem;">
+                    <i class="ri-search-line"></i> Uçuş Ara
+                </button>
+            </div>
+        </div>
+
         <!-- SCREEN: SUCCESS -->
         <div id="screen-success" class="screen">
             <div style="text-align:center; max-width:500px; margin:4rem auto;">
@@ -993,15 +1065,22 @@
                 <p id="success-message" style="font-weight:600; color:var(--text-main); margin-bottom:3rem;"></p>
                 
                 <!-- Membership Completion -->
-                <div id="complete-membership-box" style="display:none; background:var(--surface); padding:2rem; border-radius:var(--radius-lg); border:1px solid var(--border); text-align:left; margin-bottom:2rem;">
-                    <h3 style="margin-top:0; text-align:center;">Son Bir Adım Kaldı 🚀</h3>
-                    <p style="text-align:center; color:var(--text-light); margin-bottom:1.5rem;">Şifre belirleyerek üyeliğinizi tamamlayın.</p>
-                    
-                    <div class="form-group">
-                        <label for="new-password">Şifre Belirle</label>
-                        <input type="password" id="new-password" placeholder="******">
+                <div id="complete-membership-box" style="display:none; background:var(--surface); padding:1.5rem; border-radius:var(--radius-lg); border:1px solid var(--border); text-align:center; margin-bottom:2rem; box-shadow:0 10px 15px -3px rgba(0, 0, 0, 0.1); width:100%; box-sizing:border-box;">
+                    <div style="display:inline-block; background:#eff6ff; color:var(--primary); padding:0.35rem 0.85rem; border-radius:2rem; font-size:0.75rem; font-weight:700; margin-bottom:1.25rem; letter-spacing:0.05em; border:1px solid #dbeafe;">
+                        <i class="ri-lightbulb-flash-line" style="vertical-align:middle; margin-right:0.25rem;"></i>ÖNERİLEN
                     </div>
-                    <button class="btn btn-primary" onclick="finalizeMembership()">Üyeliği Tamamla</button>
+                    
+                    <h3 style="margin:0 0 0.75rem 0; font-size:1.25rem;">Son Bir Adım Kaldı</h3>
+                    <p style="color:var(--text-light); margin-bottom:1.5rem; font-size:0.95rem; line-height:1.6;">Şifre belirleyerek üyeliğinizi tamamlayın ve bir sonraki seyahatinizde bilgilerinizi tekrar girmeden hızlıca bilet alın!</p>
+                    
+                    <div class="form-group" style="text-align:left; margin-bottom:1.5rem; width:100%;">
+                        <label for="new-password" style="font-weight:500; margin-left:0.25rem; color:var(--text-main); display:block; margin-bottom:0.5rem;">Şifre Belirle</label>
+                        <div class="input-wrapper" style="width:100%;">
+                            <i class="ri-lock-password-line input-icon"></i>
+                            <input type="password" id="new-password" placeholder="••••••" style="background:var(--bg-body); width:100%;">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="finalizeMembership()" style="width:100%; justify-content:center; padding:1rem;">Üyeliği Tamamla</button>
                 </div>
 
                 <button class="btn btn-secondary" onclick="goToScreen('screen-search')">Ana Sayfaya Dön</button>
@@ -1012,51 +1091,57 @@
 
     <!-- MODAL: Freeze Price -->
     <div id="freeze-modal" class="modal-overlay">
-        <div class="modal-content" style="max-width: 450px; text-align:left;">
-            <div style="text-align:center; margin-bottom:1.5rem;">
-                <div style="font-size:3rem; color:#0ea5e9; margin-bottom:0.5rem;"><i class="ri-snowy-line"></i></div>
-                <h3 style="margin:0;">Fiyatı Dondur</h3>
-                <p style="color:var(--text-light); font-size:0.9rem;">Bu fiyatı 24 saat boyunca sabitleyin.</p>
+        <div class="modal-content" style="max-width: 420px; text-align:left; padding:1.5rem;">
+            <div style="text-align:center; margin-bottom:1rem;">
+                <div style="font-size:2.5rem; color:#0ea5e9; margin-bottom:0.25rem;"><i class="ri-snowy-line"></i></div>
+                <h3 style="margin:0; font-size:1.1rem;">Fiyatı Dondur</h3>
+                <p style="color:var(--text-light); font-size:0.8rem; margin-top:0.25rem;">Bu fiyatı 24 saat boyunca sabitleyin.</p>
             </div>
 
-            <div style="background:var(--bg-body); padding:1rem; border-radius:var(--radius-md); margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center;">
-                <span>Hizmet Bedeli</span>
-                <strong style="font-size:1.2rem; color:var(--primary);">50 TL</strong>
+            <div id="freeze-flight-info" style="background:var(--bg-body); padding:0.75rem; border-radius:var(--radius-md); margin-bottom:1rem; font-size:0.85rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="color:var(--text-light);">Seçili Uçuş Fiyatı:</span>
+                    <strong id="freeze-flight-price" style="color:var(--primary);">4.250 TL</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed var(--border);">
+                    <span style="color:var(--text-light);">Sabitleme Bedeli:</span>
+                    <strong style="color:var(--accent);">50 TL</strong>
+                </div>
             </div>
 
             <!-- Payment Section -->
             <div id="freeze-payment-form">
-                <div class="form-group">
-                    <label style="font-size:0.9rem;">Kart Numarası</label>
+                <div class="form-group" style="margin-bottom:0.75rem;">
+                    <label style="font-size:0.8rem; margin-bottom:0.25rem;">Kart Numarası</label>
                     <div class="input-wrapper">
                         <i class="ri-bank-card-line input-icon"></i>
-                        <input type="text" id="freeze-card" placeholder="0000 0000 0000 0000">
+                        <input type="text" id="freeze-card" placeholder="0000 0000 0000 0000" maxlength="19" style="padding:0.6rem 0.6rem 0.6rem 2.5rem; font-size:0.95rem;">
                     </div>
                 </div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
-                    <div class="form-group">
-                        <label style="font-size:0.9rem;">SKT</label>
-                        <input type="text" id="freeze-exp" placeholder="AA/YY" maxlength="5">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label style="font-size:0.8rem; margin-bottom:0.25rem;">SKT</label>
+                        <input type="text" id="freeze-exp" placeholder="AA/YY" maxlength="5" style="padding:0.6rem; font-size:0.95rem;">
                     </div>
-                    <div class="form-group">
-                        <label style="font-size:0.9rem;">CVC</label>
-                        <input type="text" id="freeze-cvc" placeholder="***" maxlength="3">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label style="font-size:0.8rem; margin-bottom:0.25rem;">CVC</label>
+                        <input type="text" id="freeze-cvc" placeholder="***" maxlength="3" style="padding:0.6rem; font-size:0.95rem;">
                     </div>
                 </div>
             </div>
             
             <!-- Saved Card View (Hidden by default) -->
-            <div id="freeze-saved-card" style="display:none; margin-bottom:1.5rem; padding:1rem; border:1px solid var(--border); border-radius:var(--radius-md);">
-                <div style="display:flex; align-items:center; gap:0.5rem;">
+            <div id="freeze-saved-card" style="display:none; margin-bottom:0.75rem; padding:0.6rem; border:1px solid var(--border); border-radius:var(--radius-md);">
+                <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem;">
                     <i class="ri-bank-card-fill" style="color:var(--primary);"></i>
                     <span id="freeze-card-view"></span>
                 </div>
-                <button class="btn-ghost btn-sm" onclick="toggleFreezeCard()" style="margin-top:0.5rem; padding-left:0;">Farklı Kart Kullan</button>
+                <button class="btn-ghost btn-sm" onclick="toggleFreezeCard()" style="margin-top:0.35rem; padding-left:0; font-size:0.75rem;">Farklı Kart Kullan</button>
             </div>
 
-            <div style="display:flex; gap:1rem; margin-top:1.5rem;">
-                <button class="btn btn-secondary" onclick="closeFreezeModal()">Vazgeç</button>
-                <button class="btn btn-freeze" onclick="confirmFreeze()" style="flex:1;">50 TL Öde ve Sabitle</button>
+            <div style="display:flex; gap:0.5rem; margin-top:0.75rem;">
+                <button class="btn btn-secondary" onclick="closeFreezeModal()" style="flex:1; padding:0.6rem 1rem; font-size:0.85rem; height:auto;">Vazgeç</button>
+                <button class="btn btn-freeze" onclick="confirmFreeze()" style="flex:2; padding:0.6rem 1rem; font-size:0.85rem; height:auto;"><i class="ri-lock-line"></i> 50 TL Öde ve Sabitle</button>
             </div>
         </div>
     </div>
@@ -1073,6 +1158,9 @@
 
     <script>
         let currentUser = null;
+        let frozenFlights = [];
+        let currentFreezePrice = '';
+        let currentFreezeFlight = null;
         
         // Database & Persistence
         function loadDB() {
@@ -1084,8 +1172,24 @@
         function saveDB() {
             localStorage.setItem('netbilet_users', JSON.stringify(usersDB));
         }
+        
+        function loadFrozenFlights() {
+            const stored = localStorage.getItem('netbilet_frozen');
+            if(stored) return JSON.parse(stored);
+            return [];
+        }
+        
+        function saveFrozenFlights() {
+            localStorage.setItem('netbilet_frozen', JSON.stringify(frozenFlights));
+            updateFrozenCount();
+        }
+        
+        function updateFrozenCount() {
+            document.getElementById('frozen-count').innerText = frozenFlights.length;
+        }
 
         let usersDB = loadDB();
+        frozenFlights = loadFrozenFlights();
 
         // Navigation
         function goToScreen(screenId) {
@@ -1224,10 +1328,9 @@
             }
 
             filtered.forEach(f => {
-                const freezeBtn = currentUser ? 
-                    `<button class="btn btn-freeze btn-sm" onclick="openFreezeModal('${f.price}')" style="width:auto; padding:0.5rem 0.75rem;">
-                        <i class="ri-lock-2-line"></i> Sabitle
-                    </button>` : '';
+                const freezeBtn = `<button class="btn btn-freeze btn-sm" onclick='openFreezeModal("${f.price}", ${JSON.stringify(f)})' style="width:auto; padding:0.5rem 0.75rem;">
+                        <i class="ri-snowflake-line"></i> Sabitle
+                    </button>`;
                 
                 const html = `
                 <div class="flight-card">
@@ -1538,7 +1641,10 @@
         }
 
         // Freeze Modal
-        function openFreezeModal() { 
+        function openFreezeModal(price, flight) { 
+            currentFreezePrice = price;
+            currentFreezeFlight = flight;
+            document.getElementById('freeze-flight-price').innerText = price;
             document.getElementById('freeze-modal').style.display = 'flex'; 
             
             // Check for saved card
@@ -1569,30 +1675,107 @@
         function confirmFreeze() { 
             // Validate if form is visible
             if(document.getElementById('freeze-payment-form').style.display !== 'none') {
-                const card = document.getElementById('freeze-card').value;
+                const card = document.getElementById('freeze-card').value.replace(/\s/g, '');
                 const exp = document.getElementById('freeze-exp').value;
                 const cvc = document.getElementById('freeze-cvc').value;
 
-                if(!validateCard(card)) { showToast("Geçersiz Kart Numarası"); return; }
-                if(!validateDate(exp)) { showToast("Geçersiz SKT"); return; }
-                if(!validateCVC(cvc)) { showToast("Geçersiz CVC"); return; }
+                if(!validateCard(card)) { showToast("Kart numarası 16 haneli olmalıdır"); return; }
+                if(!validateDate(exp)) { showToast("Geçersiz SKT (AA/YY)"); return; }
+                if(!validateCVC(cvc)) { showToast("CVC 3 haneli olmalıdır"); return; }
+            }
+            
+            // Uçuşu sabitlenmiş listesine ekle
+            if(currentFreezeFlight) {
+                const frozenFlight = {
+                    ...currentFreezeFlight,
+                    frozenAt: new Date().toISOString(),
+                    expiresAt: new Date(Date.now() + 24*60*60*1000).toISOString()
+                };
+                frozenFlights.push(frozenFlight);
+                saveFrozenFlights();
+                renderFrozenFlights();
             }
 
             closeFreezeModal(); 
             showToast("Fiyat 24 Saatliğine Sabitlendi! (50 TL Tahsil Edildi)"); 
         }
+        
+        function renderFrozenFlights() {
+            const container = document.getElementById('frozen-flights-list');
+            const noFlights = document.getElementById('no-frozen-flights');
+            
+            if(frozenFlights.length === 0) {
+                container.style.display = 'none';
+                noFlights.style.display = 'block';
+                return;
+            }
+            
+            container.style.display = 'grid';
+            noFlights.style.display = 'none';
+            container.innerHTML = '';
+            
+            frozenFlights.forEach((f, index) => {
+                const expiresAt = new Date(f.expiresAt);
+                const now = new Date();
+                const hoursLeft = Math.max(0, Math.floor((expiresAt - now) / (1000*60*60)));
+                const minutesLeft = Math.max(0, Math.floor(((expiresAt - now) % (1000*60*60)) / (1000*60)));
+                
+                const html = `
+                <div class="flight-card" style="border-left:4px solid #0ea5e9;">
+                    <div class="flight-header">
+                        <span><i class="ri-plane-line"></i> ${f.airline} (${f.code})</span>
+                        <span style="background:#e0f2fe; color:#0369a1; padding:0.25rem 0.75rem; border-radius:1rem; font-size:0.8rem;">
+                            <i class="ri-time-line"></i> ${hoursLeft}s ${minutesLeft}dk kaldı
+                        </span>
+                    </div>
+                    <div class="flight-route">
+                        <div class="route-point">${f.time} <br><span style="font-size:0.8rem; font-weight:400; color:var(--text-light);">${f.origin}</span></div>
+                        <div class="route-line"></div>
+                        <div class="route-point">--:-- <br><span style="font-size:0.8rem; font-weight:400; color:var(--text-light);">${f.dest}</span></div>
+                    </div>
+                    <div style="font-size:0.85rem; color:var(--text-light); margin-bottom:1rem;">
+                        <i class="ri-calendar-line"></i> ${f.date} • ${f.type} • ${f.duration}
+                    </div>
+                    <div class="flight-footer">
+                        <div class="price-display">
+                            <span class="price-amount">${f.price}</span>
+                            <span class="price-label" style="color:#0ea5e9;"><i class="ri-lock-fill"></i> Sabitlenmiş Fiyat</span>
+                        </div>
+                        <div style="display:flex; gap:0.5rem; align-items:center;">
+                            <button class="btn btn-secondary" onclick="removeFrozenFlight(${index})" style="padding:0.5rem 0.75rem; height:auto; width:auto;"><i class="ri-delete-bin-line"></i></button>
+                            <button class="btn btn-primary" onclick="buyFrozenFlight(${index})" style="padding:0.5rem 1rem; height:auto; width:auto;">Satın Al <i class="ri-arrow-right-line"></i></button>
+                        </div>
+                    </div>
+                </div>`;
+                container.innerHTML += html;
+            });
+        }
+        
+        function removeFrozenFlight(index) {
+            frozenFlights.splice(index, 1);
+            saveFrozenFlights();
+            renderFrozenFlights();
+            showToast("Sabitlenmiş uçuş silindi");
+        }
+        
+        function buyFrozenFlight(index) {
+            const f = frozenFlights[index];
+            selectFlight(f.price);
+        }
 
         // Init
         window.onload = function() {
             renderFlights();
+            renderFrozenFlights();
+            updateFrozenCount();
 
             // Auto-format Date Input (MM/YY)
-            const inputs = ['edit-exp', 'freeze-exp'];
-            inputs.forEach(id => {
+            const dateInputs = ['edit-exp', 'freeze-exp'];
+            dateInputs.forEach(id => {
                 const el = document.getElementById(id);
                 if(el) {
                     el.addEventListener('input', function(e) {
-                        let input = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                        let input = e.target.value.replace(/\D/g, '');
                         if (input.length > 2) {
                             input = input.substring(0, 2) + '/' + input.substring(2, 4);
                         }
@@ -1600,9 +1783,24 @@
                     });
                 }
             });
+            
+            // Auto-format Card Number (0000 0000 0000 0000)
+            const cardEl = document.getElementById('freeze-card');
+            if(cardEl) {
+                cardEl.addEventListener('input', function(e) {
+                    let input = e.target.value.replace(/\D/g, ''); // Sadece rakamlar
+                    input = input.substring(0, 16); // Max 16 hane
+                    // 4'lü gruplar halinde boşluk ekle
+                    let formatted = '';
+                    for(let i = 0; i < input.length; i++) {
+                        if(i > 0 && i % 4 === 0) formatted += ' ';
+                        formatted += input[i];
+                    }
+                    e.target.value = formatted;
+                });
+            }
         };
 
     </script>
 </body>
 </html>
-
